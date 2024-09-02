@@ -1,8 +1,12 @@
-program Test;
+program SampleProgram;
 var
-  x: integer
+  a : integer;
+  c : string;
+  d : boolean;
+  arr1 : array[1..10] of integer;
+  arr2 : array[1..10,1..10] of boolean;
 begin
-  x := 10;
-  write('Value of x: ', x);
+  a := 10;
+  c := 'Hello';
+  d := true;
 end.
-
