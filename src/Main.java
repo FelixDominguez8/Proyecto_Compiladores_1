@@ -1,38 +1,35 @@
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
-import java.io.IOException;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import Parser.*;
 public class Main {
     public static void main(String[] args) {
-        String inputFilePath = "C:\\\\Users\\\\Lenovo I7\\\\Documents\\\\Compiladores 1\\\\Proyecto\\\\proyecto_compiI\\\\Proyecto_Compiladores1\\\\src\\\\prueba.pas";
-
         try {
-            // Crear el lexer y el parser
-            MiniPascalLexer lexer = new MiniPascalLexer(CharStreams.fromFileName(inputFilePath));
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            MiniPascalParser parser = new MiniPascalParser(tokens);
-
-            // Usar el parser personalizado para manejo de errores
-            parser.removeErrorListeners(); // Elimina los listeners de errores predeterminados
-            CustomMiniPascalParser.resetError(); // Resetea el indicador de error
-            parser.addErrorListener(new CustomMiniPascalParser()); // Agrega tu listener personalizado
-
-            // Parsear el archivo
-            ParseTree tree = parser.program(); // Inicia desde la regla `program`
-
-            // Verificar si ocurrió un error
-            if (CustomMiniPascalParser.hasError()) {
-                System.err.println("Parsing detenido debido a errores.");
-                return; // Termina el proceso si hay errores
+            String inputFile = null;
+            if (args.length > 0) inputFile = args[0];
+            InputStream is = System.in;
+            if (inputFile != null) {
+                File file = new File(inputFile);
+                if (file.exists() && !file.isDirectory()) {
+                    System.out.println("Archivo encontrado: " + inputFile);
+                    is = new FileInputStream(file);
+                } else {
+                    System.err.println("El archivo no existe: " + inputFile);
+                    return;
+                }
             }
 
-            // Imprimir el árbol de análisis sintáctico (opcional)
-            System.out.println("Árbol de análisis sintáctico:");
-            System.out.println(tree.toStringTree(parser));
-            System.out.println("Parsing completado exitosamente.");
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo: " + e.getMessage());
+            CharStream input = CharStreams.fromStream(is);
+            MiniPascalLexer lexer = new MiniPascalLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            MiniPascalParser parser = new MiniPascalParser(tokens);
+            ParseTree tree = parser.program();
+            MiniPascalVisitor eval = new MiniPascalVisitor();
+            eval.visit(tree);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

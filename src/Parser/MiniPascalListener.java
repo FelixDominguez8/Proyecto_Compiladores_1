@@ -1,4 +1,5 @@
-// Generated from MiniPascal.g4 by ANTLR 4.13.1
+// Generated from C:/Users/Alberth/OneDrive - Universidad Tecnologica Centroamericana/Documents/Unitec/2024/III Trimestre/Compiladores_1/proyecto/nuevo_proyecto_compi/Proyecto_Compiladores_1/src/MiniPascal.g4 by ANTLR 4.13.1
+package Parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -76,6 +77,16 @@ public interface MiniPascalListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArrayType(MiniPascalParser.ArrayTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MiniPascalParser#arrayDimension}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayDimension(MiniPascalParser.ArrayDimensionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MiniPascalParser#arrayDimension}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayDimension(MiniPascalParser.ArrayDimensionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MiniPascalParser#statement}.
 	 * @param ctx the parse tree

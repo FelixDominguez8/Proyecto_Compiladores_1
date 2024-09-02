@@ -1,10 +1,10 @@
 grammar MiniPascal;
 
-// Tokens
 COMMENT : '{' .*? '}' -> skip ;
 WS : [ \t\r\n]+ -> skip ;
 CONSTCHAR : '\'' ~('\'' | '\n' | '\r') '\'' ;
 CONSTSTR : '\'' (~('\'' | '\n' | '\r'))* '\'' ;
+DOT : '.' ;
 VAR : 'var' ;
 BEGIN : 'begin' ;
 END : 'end' ;
@@ -55,17 +55,21 @@ NUMBER : [0-9]+ ;
 // Reglas
 program : PROGRAM IDENTIFIER SEMICOLON block '.' ;
 
-block : varDeclaration* BEGIN statement* END ;
+block : (varDeclaration)? BEGIN statement* END ;
 
-varDeclaration : VAR varDeclList SEMICOLON ;
+varDeclaration : VAR varDeclList ;
 
-varDeclList : varDecl (COMMA varDecl)* ;
+varDeclList : varDecl (varDecl)* ;
 
-varDecl : IDENTIFIER COLON type ;
+varDecl : IDENTIFIER COLON type SEMICOLON ;
 
 type : INTEGER | CHAR | STRING | BOOLEAN | arrayType ;
 
-arrayType : ARRAY LBRACKET NUMBER RBRACKET OF type ;
+arrayType
+    : ARRAY LBRACKET arrayDimension (COMMA arrayDimension)* RBRACKET OF (INTEGER | CHAR | BOOLEAN);
+
+arrayDimension
+    : NUMBER DOT DOT NUMBER;
 
 statement : assignment | ifStatement | whileStatement | forStatement | writeStatement | readStatement ;
 
@@ -85,5 +89,4 @@ expr : term (PLUS term | MINUS term)* ;
 
 term : factor (MULT factor | DIV factor | MOD factor)* ;
 
-factor : IDENTIFIER | NUMBER | LPAREN expr RPAREN ;
-
+factor : IDENTIFIER | NUMBER | LPAREN expr RPAREN | CONSTCHAR | CONSTSTR | TRUE | FALSE ;
