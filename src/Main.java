@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import Parser.*;
+import java.io.IOException;
+
 public class Main {
     public static void main(String[] args) {
         try {
@@ -25,11 +27,25 @@ public class Main {
             MiniPascalLexer lexer = new MiniPascalLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MiniPascalParser parser = new MiniPascalParser(tokens);
-            ParseTree tree = parser.program();
-            MiniPascalVisitor eval = new MiniPascalVisitor();
-            eval.visit(tree);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            parser.removeErrorListeners();
+            CustomMiniPascalParser.resetError();
+            parser.addErrorListener(new CustomMiniPascalParser());
+
+            ParseTree tree = parser.programa();
+
+            if (CustomMiniPascalParser.hasError()) {
+                System.err.println("Parsing detenido debido a errores.");
+                return; // Termina el proceso si hay errores
+            }
+
+            System.out.println("Árbol de análisis sintáctico:");
+            System.out.println(tree.toStringTree(parser));
+            System.out.println("Parsing completado exitosamente.");
+            //MiniPascalVisitor eval = new MiniPascalVisitor();
+            //eval.visit(tree);
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
         }
     }
 }

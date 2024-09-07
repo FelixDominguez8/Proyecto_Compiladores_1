@@ -1,92 +1,128 @@
 grammar MiniPascal;
 
-COMMENT : '{' .*? '}' -> skip ;
-WS : [ \t\r\n]+ -> skip ;
-CONSTCHAR : '\'' ~('\'' | '\n' | '\r') '\'' ;
-CONSTSTR : '\'' (~('\'' | '\n' | '\r'))* '\'' ;
-DOT : '.' ;
-VAR : 'var' ;
+options {
+    caseInsensitive = true;
+}
+
+//Tokens
+PROGRAM : 'program' ;
+FUNCTION : 'function' ;
+LENGTH : 'length' ;
+PROCEDURE : 'procedure' ;
 BEGIN : 'begin' ;
 END : 'end' ;
-PROGRAM : 'program' ;
-WRITE : 'write' ;
-READ : 'read' ;
+CONST : 'const' ;
+VAR : 'var' ;
+ARRAY : 'array' ;
+TO : 'to' ;
+CHAR : 'char' ;
+BOOLEAN : 'boolean' ;
+INTEGER : 'integer' ;
+OF : 'of' ;
+STRING : 'string' ;
+TYPE : 'type' ;
 IF : 'if' ;
-THEN : 'then' ;
 ELSE : 'else' ;
-WHILE : 'while' ;
 DO : 'do' ;
 FOR : 'for' ;
-TO : 'to' ;
 DOWNTO : 'downto' ;
-INTEGER : 'integer' ;
-CHAR : 'char' ;
-STRING : 'string' ;
-BOOLEAN : 'boolean' ;
-ARRAY : 'array' ;
-OF : 'of' ;
-TRUE : 'true' ;
-FALSE : 'false' ;
-NOT : 'not' ;
-AND : 'and' ;
-OR : 'or' ;
+REPEAT : 'repeat' ;
+THEN : 'then' ;
+UNTIL : 'until' ;
+WHILE : 'while' ;
 PLUS : '+' ;
 MINUS : '-' ;
-MULT : '*' ;
-DIV : '/' ;
+MULTIPLY : '*' ;
+DIVIDE : '/' ;
 MOD : 'mod' ;
-COLON : ':' ;
-SEMICOLON : ';' ;
-COMMA : ',' ;
+DIV : 'div' ;
+AND : 'and' ;
+NOT : 'not' ;
+OR : 'or' ;
+TRUE : 'true' ;
+FALSE : 'false' ;
+EQUAL : '=' ;
+NOTEQUAL : '<>' ;
+LESSTHEN : '<' ;
+LESSEQUAL : '<=' ;
+GREATEQUAL : '>=' ;
+GREATTHEN : '>' ;
 ASSIGN : ':=' ;
-LPAREN : '(' ;
-RPAREN : ')' ;
+COMMA : ',' ;
+SEMICOLON : ';' ;
+COLON : ':' ;
+PARL : '(' ;
+PARR : ')' ;
 LBRACKET : '[' ;
+LBRACKETP : '(.' ;
 RBRACKET : ']' ;
-LT : '<' ;
-LE : '<=' ;
-GT : '>' ;
-GE : '>=' ;
-EQ : '=' ;
-NEQ : '<>' ;
-IDENTIFIER : [a-zA-Z_] [a-zA-Z_0-9]* ;
-NUMBER : [0-9]+ ;
+RBRACKETP : '.)' ;
+DOT : '.' ;
+DOT2 : '..' ;
+SPACE : [ \t\r\n] -> skip ;
+COMMENT : '{' .*? '}' -> skip ;
+LSTRING : '\'' ('\'\'' | ~ ('\''))* '\'' ;
+NUM : ('0' .. '9')+ ;
+IDENTIFIER : ('A' .. 'Z') ('A' .. 'Z' | '0' .. '9' | '_')* ;
 
-// Reglas
-program : PROGRAM IDENTIFIER SEMICOLON block '.' ;
-
-block : (varDeclaration)? BEGIN statement* END ;
-
-varDeclaration : VAR varDeclList ;
-
-varDeclList : varDecl (varDecl)* ;
-
-varDecl : IDENTIFIER COLON type SEMICOLON ;
-
-type : INTEGER | CHAR | STRING | BOOLEAN | arrayType ;
-
-arrayType
-    : ARRAY LBRACKET arrayDimension (COMMA arrayDimension)* RBRACKET OF (INTEGER | CHAR | BOOLEAN);
-
-arrayDimension
-    : NUMBER DOT DOT NUMBER;
-
-statement : assignment | ifStatement | whileStatement | forStatement | writeStatement | readStatement ;
-
-assignment : IDENTIFIER ASSIGN expr SEMICOLON ;
-
-ifStatement : IF expr THEN statement (ELSE statement)? ;
-
-whileStatement : WHILE expr DO statement ;
-
-forStatement : FOR assignment TO expr DO statement ;
-
-writeStatement : WRITE LPAREN (CONSTSTR (COMMA IDENTIFIER)?)? RPAREN SEMICOLON ;
-
-readStatement : READ LPAREN IDENTIFIER RPAREN SEMICOLON ;
-
-expr : term (PLUS term | MINUS term)* ;
-
-term : factor (MULT factor | DIV factor | MOD factor)* ;
-
-factor : IDENTIFIER | NUMBER | LPAREN expr RPAREN | CONSTCHAR | CONSTSTR | TRUE | FALSE ;
+//Reglas
+programa : encabezado bloque DOT EOF ;
+encabezado : PROGRAM IDENTIFIER (PARL listaidentificadores PARR)? SEMICOLON;
+bloque : ( constantDefinitionPart | secciondefiniciontipo | variableDeclarationPart | secciondeclaracionprocesoofuncion)* bloqueinstruccion ;
+length : LENGTH PARL variable PARR ;
+instruccion : NUM COLON tipoinstruccion | tipoinstruccion ;
+tipoinstruccion : instruccionsimple | instruccionestructurada ;
+instruccionsimple : instruccionasignacion | instruccionprocedimiento | instruccionvacia ;
+instruccionestructurada : bloqueinstruccion | estructuraif | estructurarepetitiva;
+instruccionasignacion : variable ASSIGN expresion ;
+bloqueinstruccion : BEGIN instrucciones END ;
+estructurarepetitiva : buclewhile | buclerepeat | buclefor ;
+instrucciones : instruccion (SEMICOLON instruccion)* ;
+buclerepeat : REPEAT instrucciones UNTIL expresion ;
+buclewhile : WHILE expresion DO instruccion ;
+estructuraif : IF expresion THEN instruccion (: ELSE instruccion)? ;
+buclefor : FOR IDENTIFIER ASSIGN listafor DO instruccion ;
+listafor : expresion (TO | DOWNTO) expresion ;
+tipo : tiposimple | tipoarreglo;
+tipolista : tiposimple (COMMA tiposimple)* ;
+tipoidentificador : IDENTIFIER | (CHAR | BOOLEAN | INTEGER | STRING) ;
+definiciontipo : IDENTIFIER EQUAL (tipo | tipofuncion | tipoproceso) ;
+secciondefiniciontipo : TYPE (definiciontipo SEMICOLON)+ ;
+tipofuncion : FUNCTION (listaformalparametros)? COLON tipoidentificador ;
+tipoproceso : PROCEDURE (listaformalparametros)? ;
+tipoarreglo : ARRAY LBRACKET tipolista RBRACKET OF tipo | ARRAY LBRACKETP tipolista RBRACKETP OF tipo ;
+tipocadena : STRING LBRACKET (IDENTIFIER | NUM) RBRACKET ;
+tiposimple : tipoescalar | tiposubrango | tipoidentificador | tipocadena ;
+tipoescalar : PARL listaidentificadores PARR ;
+tiposubrango : constante DOT2 constante ;
+signo : PLUS | MINUS ;
+valorbooleano : TRUE | FALSE ;
+constante : NUM | signo NUM | IDENTIFIER | signo IDENTIFIER | LSTRING | length ;
+declaracionvariable : listaidentificadores COLON tipo ;
+variableDeclarationPart : VAR declaracionvariable (SEMICOLON declaracionvariable)* SEMICOLON ;
+definicionconstante : IDENTIFIER EQUAL constante ;
+constantDefinitionPart : CONST (definicionconstante SEMICOLON)+ ;
+procedureDeclaration : PROCEDURE IDENTIFIER (listaformalparametros)? SEMICOLON bloque ;
+declaracionprocesoofuncion : procedureDeclaration | declaracionfuncion ;
+secciondeclaracionprocesoofuncion : declaracionprocesoofuncion SEMICOLON ;
+listaparametros : parametroactual (COMMA parametroactual)* ;
+grupoparametros : listaidentificadores COLON tipoidentificador ;
+parametroactual : expresion anchoparametro* ;
+anchoparametro : COLON expresion ;
+listaformalparametros : PARL seccionformalparametros (SEMICOLON seccionformalparametros)* PARR ;
+seccionformalparametros : grupoparametros | VAR grupoparametros | FUNCTION grupoparametros | PROCEDURE grupoparametros ;
+listaidentificadores : IDENTIFIER (COMMA IDENTIFIER)* ;
+declaracionfuncion : FUNCTION IDENTIFIER (listaformalparametros)? COLON tipoidentificador SEMICOLON bloque ;
+designarfuncion : IDENTIFIER PARL listaparametros PARR ;
+instruccionprocedimiento : IDENTIFIER (PARL listaparametros PARR)? ;
+variable : IDENTIFIER ( LBRACKET expresion (COMMA expresion)* RBRACKET | LBRACKETP expresion (COMMA expresion)* RBRACKETP | DOT IDENTIFIER)* ;
+expresionsimple : termino (operadoraditivo expresionsimple)? ;
+expresion : expresionsimple (operadorrelacional expresion)? ;
+operadorrelacional : EQUAL | NOTEQUAL | LESSTHEN | LESSEQUAL | GREATEQUAL | GREATTHEN ;
+operadormultiplicativo : MULTIPLY | DIVIDE | DIV | MOD | AND ;
+operadoraditivo : PLUS | MINUS | OR ;
+termino : signofactor (operadormultiplicativo termino)? ;
+signofactor : (PLUS | MINUS)? factor ;
+factor : variable | PARL expresion PARR | designarfuncion | constante | NOT factor | valorbooleano ;
+instruccionvacia : ;
+vacio : /* nada */ ;
