@@ -256,54 +256,6 @@ public class MiniPascalBaseListener implements MiniPascalListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDefiniciontipo(MiniPascalParser.DefiniciontipoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDefiniciontipo(MiniPascalParser.DefiniciontipoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSecciondefiniciontipo(MiniPascalParser.SecciondefiniciontipoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSecciondefiniciontipo(MiniPascalParser.SecciondefiniciontipoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTipofuncion(MiniPascalParser.TipofuncionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTipofuncion(MiniPascalParser.TipofuncionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTipoproceso(MiniPascalParser.TipoprocesoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTipoproceso(MiniPascalParser.TipoprocesoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterTipoarreglo(MiniPascalParser.TipoarregloContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -412,13 +364,13 @@ public class MiniPascalBaseListener implements MiniPascalListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableDeclarationPart(MiniPascalParser.VariableDeclarationPartContext ctx) { }
+	@Override public void enterSecciondeclaracionvariable(MiniPascalParser.SecciondeclaracionvariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableDeclarationPart(MiniPascalParser.VariableDeclarationPartContext ctx) { }
+	@Override public void exitSecciondeclaracionvariable(MiniPascalParser.SecciondeclaracionvariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -436,25 +388,25 @@ public class MiniPascalBaseListener implements MiniPascalListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstantDefinitionPart(MiniPascalParser.ConstantDefinitionPartContext ctx) { }
+	@Override public void enterSecciondeclaracionconstante(MiniPascalParser.SecciondeclaracionconstanteContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitConstantDefinitionPart(MiniPascalParser.ConstantDefinitionPartContext ctx) { }
+	@Override public void exitSecciondeclaracionconstante(MiniPascalParser.SecciondeclaracionconstanteContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterProcedureDeclaration(MiniPascalParser.ProcedureDeclarationContext ctx) { }
+	@Override public void enterDeclaracionproceso(MiniPascalParser.DeclaracionprocesoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitProcedureDeclaration(MiniPascalParser.ProcedureDeclarationContext ctx) { }
+	@Override public void exitDeclaracionproceso(MiniPascalParser.DeclaracionprocesoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
