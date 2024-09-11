@@ -23,27 +23,23 @@ public class Main {
                 }
             }
 
+
             CharStream input = CharStreams.fromStream(is);
             MiniPascalLexer lexer = new MiniPascalLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MiniPascalParser parser = new MiniPascalParser(tokens);
-
-            parser.removeErrorListeners();
-            CustomMiniPascalParser.resetError();
-            parser.addErrorListener(new CustomMiniPascalParser());
-
             ParseTree tree = parser.programa();
 
-            if (CustomMiniPascalParser.hasError()) {
-                System.err.println("Parsing detenido debido a errores.");
-                return; // Termina el proceso si hay errores
-            }
 
-            System.out.println("Árbol de análisis sintáctico:");
-            System.out.println(tree.toStringTree(parser));
             System.out.println("Parsing completado exitosamente.");
-            //MiniPascalVisitor eval = new MiniPascalVisitor();
-            //eval.visit(tree);
+
+
+            MiniPascalVisitor visitor = new MiniPascalVisitor();
+            String result = visitor.visit(tree);
+
+            System.out.println("Resultado del Visitor:");
+            System.out.println(result);
+
         } catch (IOException e) {
             System.err.println("Error al leer el archivo: " + e.getMessage());
         }
