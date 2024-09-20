@@ -319,6 +319,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         }
         return resultado.toString();
     }
+
     @Override
     public String visitGrupoparametros(MiniPascalParser.GrupoparametrosContext ctx) {
         return visitListaidentificadores(ctx.listaidentificadores()) + ctx.COLON().getText() + visitTipoidentificador(ctx.tipoidentificador());
