@@ -15,6 +15,6 @@
         <JAVADOC />
         <SOURCES />
       </library>
-    </orderEntry>
+    <orderEntry type="library" name="antlr-4.13.2-complete" level="project" />
   </component>
 </module>

@@ -96,6 +96,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     @Override
     public String visitInstrucciones(MiniPascalParser.InstruccionesContext ctx) {
         StringBuilder resultado = new StringBuilder();
+
        if (ctx.instruccion() != null){
            for (MiniPascalParser.InstruccionContext instr : ctx.instruccion()) {
                visitInstruccion(instr);
@@ -319,6 +320,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         }
         return resultado.toString();
     }
+
     @Override
     public String visitGrupoparametros(MiniPascalParser.GrupoparametrosContext ctx) {
         return visitListaidentificadores(ctx.listaidentificadores()) + ctx.COLON().getText() + visitTipoidentificador(ctx.tipoidentificador());
@@ -350,7 +352,9 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     @Override
     public String visitEstructuraif(MiniPascalParser.EstructuraifContext ctx) {
         StringBuilder resultado = new StringBuilder();
+
         if (ctx.IF() != null && ctx.ELSE() != null) {
+
             resultado.append(ctx.IF().getText());
             resultado.append(" ");
             for (MiniPascalParser.ExpresionContext cond : ctx.expresion()) {
@@ -473,6 +477,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         return ctx.IDENTIFIER().getText() + (ctx.PARL() != null ? ctx.PARL().getText() : "") + (ctx.listaparametros() != null ? visitListaparametros(ctx.listaparametros()) : "") + (ctx.PARR() != null ? ctx.PARR().getText() + ";": "");
     }
 
+
     @Override
     public String visitSecciondeclaracionconstante(MiniPascalParser.SecciondeclaracionconstanteContext ctx) {
         StringBuilder resultado = new StringBuilder("const ");
@@ -485,6 +490,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     public String visitDefinicionconstante(MiniPascalParser.DefinicionconstanteContext ctx) {
         return ctx.IDENTIFIER().getText() + " = " + visitConstante(ctx.constante()) + ";\n";
     }
+
 }
 
 

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import Parser.*;
 import java.io.IOException;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -26,8 +27,14 @@ public class Main {
 
             CharStream input = CharStreams.fromStream(is);
             MiniPascalLexer lexer = new MiniPascalLexer(input);
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(new CustomErrorLexer());
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MiniPascalParser parser = new MiniPascalParser(tokens);
+
+            parser.removeErrorListeners();
+            parser.addErrorListener(new CustomErrorParser());
+          
             ParseTree tree = parser.programa();
 
 
@@ -39,6 +46,7 @@ public class Main {
 
             System.out.println("Resultado del Visitor:");
             System.out.println(result);
+
 
         } catch (IOException e) {
             System.err.println("Error al leer el archivo: " + e.getMessage());
