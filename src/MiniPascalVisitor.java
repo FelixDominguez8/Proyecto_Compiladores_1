@@ -48,7 +48,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         }
 
         if (ctx.bloqueinstruccion() != null){
-            String bloqueInstruccion = "----------------PROGRAM INSTRUCTIONS:------------------------\n";
+            String bloqueInstruccion = "\n----------------PROGRAM INSTRUCTIONS:------------------------\n";
             resultado.append(bloqueInstruccion);
             resultado.append(visitBloqueinstruccion(ctx.bloqueinstruccion()));
         }
@@ -350,7 +350,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     @Override
     public String visitEstructuraif(MiniPascalParser.EstructuraifContext ctx) {
         StringBuilder resultado = new StringBuilder();
-        if (ctx.IF() != null) {
+        if (ctx.IF() != null && ctx.ELSE() != null) {
             resultado.append(ctx.IF().getText());
             resultado.append(" ");
             for (MiniPascalParser.ExpresionContext cond : ctx.expresion()) {
@@ -358,6 +358,11 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
             }
             resultado.append(" ");
             resultado.append("then\n\t\t");
+            resultado.append(" ");
+            for (MiniPascalParser.InstruccionContext bloque : ctx.instruccion()) {
+                resultado.append(visitInstruccion(bloque));
+            }
+            resultado.append("\n\telse\n\t\t");
             resultado.append(" ");
             for (MiniPascalParser.InstruccionContext bloque : ctx.instruccion()) {
                 resultado.append(visitInstruccion(bloque));
@@ -387,13 +392,17 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
             }
 
 
-        } else if (ctx.ELSE() != null) {
-            {
-                resultado.append("\n\t" + ctx.ELSE().getText() + "\n\t\t" );
-                resultado.append(" ");
-                for (MiniPascalParser.InstruccionContext bloque : ctx.instruccion()) {
-                    resultado.append(visitInstruccion(bloque));
-                }
+        } else {
+            resultado.append(ctx.IF().getText());
+            resultado.append(" ");
+            for (MiniPascalParser.ExpresionContext cond : ctx.expresion()) {
+                resultado.append(visitExpresion(cond));
+            }
+            resultado.append(" ");
+            resultado.append("then\n\t\t");
+            resultado.append(" ");
+            for (MiniPascalParser.InstruccionContext bloque : ctx.instruccion()) {
+                resultado.append(visitInstruccion(bloque));
             }
         }
         return resultado.toString();
@@ -462,6 +471,19 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     @Override
     public String visitInstruccionprocedimiento(MiniPascalParser.InstruccionprocedimientoContext ctx) {
         return ctx.IDENTIFIER().getText() + (ctx.PARL() != null ? ctx.PARL().getText() : "") + (ctx.listaparametros() != null ? visitListaparametros(ctx.listaparametros()) : "") + (ctx.PARR() != null ? ctx.PARR().getText() + ";": "");
+    }
+
+    @Override
+    public String visitSecciondeclaracionconstante(MiniPascalParser.SecciondeclaracionconstanteContext ctx) {
+        StringBuilder resultado = new StringBuilder("const ");
+        for (MiniPascalParser.DefinicionconstanteContext declConst : ctx.definicionconstante()) {
+            resultado.append(visitDefinicionconstante(declConst));
+        }
+        return resultado.toString();
+    }
+    @Override
+    public String visitDefinicionconstante(MiniPascalParser.DefinicionconstanteContext ctx) {
+        return ctx.IDENTIFIER().getText() + " = " + visitConstante(ctx.constante()) + ";\n";
     }
 }
 
