@@ -31,9 +31,10 @@ public class Main {
             lexer.addErrorListener(new CustomErrorLexer());
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MiniPascalParser parser = new MiniPascalParser(tokens);
+
             parser.removeErrorListeners();
             parser.addErrorListener(new CustomErrorParser());
-
+          
             ParseTree tree = parser.programa();
 
 

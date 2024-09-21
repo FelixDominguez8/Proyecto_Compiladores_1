@@ -80,7 +80,7 @@ estructurarepetitiva : buclewhile | buclerepeat | buclefor ;
 instrucciones : instruccion (SEMICOLON instruccion)* ;
 buclerepeat : REPEAT instrucciones UNTIL expresion ;
 buclewhile : WHILE expresion DO instruccion ;
-estructuraif : IF expresion THEN instruccion | IF expresion THEN instruccion (ELIF expresion THEN instruccion) | ELSE instruccion ;
+estructuraif : IF expresion THEN instruccion (ELSE instruccion)?| IF expresion THEN instruccion (ELIF expresion THEN instruccion) | ELSE instruccion ;
 buclefor : FOR IDENTIFIER ASSIGN listafor DO instruccion ;
 listafor : expresion (TO | DOWNTO) expresion ;
 tipo : tiposimple | tipoarreglo;
