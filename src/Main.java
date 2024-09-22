@@ -6,22 +6,22 @@ import java.io.InputStream;
 import Parser.*;
 import java.io.IOException;
 import java.util.List;
+import javax.swing.JFileChooser;
 
 public class Main {
     public static void main(String[] args) {
         try {
-            String inputFile = null;
-            if (args.length > 0) inputFile = args[0];
             InputStream is = System.in;
-            if (inputFile != null) {
-                File file = new File(inputFile);
-                if (file.exists() && !file.isDirectory()) {
-                    System.out.println("Archivo encontrado: " + inputFile);
-                    is = new FileInputStream(file);
-                } else {
-                    System.err.println("El archivo no existe: " + inputFile);
-                    return;
+            File selectedFile = chooseFile();
+            if (selectedFile != null) {
+                try {
+                    is = new FileInputStream(selectedFile);
+                    System.out.println("Archivo encontrado: " + selectedFile.getAbsolutePath());
+                } catch (Exception e) {
+                    System.err.println("No se pudo abrir el archivo: " + e.getMessage());
                 }
+            } else {
+                System.out.println("No se seleccionó ningún archivo.");
             }
 
 
@@ -50,6 +50,25 @@ public class Main {
 
         } catch (IOException e) {
             System.err.println("Error al leer el archivo: " + e.getMessage());
+        }
+    }
+
+    private static File chooseFile() {
+        String raizProyecto = System.getProperty("user.dir");
+        JFileChooser fileChooser = new JFileChooser(new File(raizProyecto));
+        int result = fileChooser.showOpenDialog(null);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            if (selectedFile.exists() && !selectedFile.isDirectory()) {
+                return selectedFile;
+            } else {
+                System.err.println("El archivo no existe o es un directorio.");
+                return null;
+            }
+        } else {
+            System.out.println("El usuario canceló la selección del archivo.");
+            return null;
         }
     }
 }

@@ -235,9 +235,18 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     }
     @Override
     public String visitTipoarreglo(MiniPascalParser.TipoarregloContext ctx) {
-        String baseType = visitTipo(ctx.tipo()); // Procesa el tipo base del arreglo
-        String dimensiones = visitTiposubrango(ctx.tipolista().tiposimple().getFirst().tiposubrango()); // Procesa las dimensiones del arreglo
-        return "array[" + dimensiones + "] of " + baseType;
+        StringBuilder resultado = new StringBuilder();
+
+        if (ctx.LBRACKETP() != null){
+            resultado.append(ctx.ARRAY().getText() + ctx.LBRACKETP().getText() + visitTipolista(ctx.tipolista()) + ctx.RBRACKETP().getText() + " " + ctx.OF().getText() + " " + visitTipo(ctx.tipo()));
+        } else if (ctx.LBRACKET() != null) {
+            resultado.append(ctx.ARRAY().getText() + ctx.LBRACKET().getText() + visitTipolista(ctx.tipolista()) + ctx.RBRACKET().getText() + " " + ctx.OF().getText() + " " + visitTipo(ctx.tipo()));
+        } else {
+            resultado.append(ctx.ARRAY().getText() + ctx.LBRACKETP().getText() + visitTipolista(ctx.tipolista()) + ctx.RBRACKETP().getText() + " " + ctx.OF().getText() + " " + visitTipo(ctx.tipo()));
+
+        }
+        return resultado.toString();
+
     }
     @Override
     public String visitTiposimple(MiniPascalParser.TiposimpleContext ctx) {
@@ -298,7 +307,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
 
     @Override
     public String visitDeclaracionproceso(MiniPascalParser.DeclaracionprocesoContext ctx) {
-        return ctx.PROCEDURE().getText() + " " +  ctx.IDENTIFIER().getText() + ctx.PARL().getText() + visitListaformalparametros(ctx.listaformalparametros()) + ctx.PARR().getText()
+        return ctx.PROCEDURE().getText() + " " +  ctx.IDENTIFIER().getText() + ctx.PARL().getText() + (ctx.listaformalparametros() != null ? visitListaformalparametros(ctx.listaformalparametros()) : "") + ctx.PARR().getText()
                 + ctx.SEMICOLON().getText() + visitBloque(ctx.bloque());
     }
     @Override
@@ -330,7 +339,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
 
     @Override
     public String visitGrupoparametros(MiniPascalParser.GrupoparametrosContext ctx) {
-        return visitListaidentificadores(ctx.listaidentificadores()) + ctx.COLON().getText() + visitTipoidentificador(ctx.tipoidentificador());
+        return visitListaidentificadores(ctx.listaidentificadores()) + ctx.COLON().getText() + (ctx.tipoidentificador() != null ? visitTipoidentificador(ctx.tipoidentificador()) : "") + (ctx.tipoarreglo() != null ? visitTipoarreglo(ctx.tipoarreglo()) : "");
     }
 
     @Override
