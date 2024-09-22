@@ -1,41 +1,26 @@
-program CiclosYCondicionales;
+program IfConBegin;
 
 var
-  i, n, suma: integer;
+  n: integer;
 
 begin
-  writeln('Ingrese un número para la suma de los primeros N números:');
+  writeln('Ingrese un número:');
   readln(n);
 
-  suma := 0;
-
-  { Ciclo while }
-  i := 1;
-  while i <= n do
+  { Evaluación de la expresión booleana con IF y BEGIN }
+  if n > 10 then
   begin
-    suma := suma + i;
-    i := i + 1;
-  end;
-  writeln('Suma usando while: ', suma);
-
-  { Ciclo for }
-  suma := 0;
-  for i := 1 to n do
-    suma := suma + i;
-  writeln('Suma usando for: ', suma);
-
-  { Ciclo repeat-until }
-  suma := 0;
-  i := 1;
-  repeat
-    suma := suma + i;
-    i := i + 1;
-  until i > n;
-  writeln('Suma usando repeat-until: ', suma);
-
-  { Instrucción if }
-  if suma mod 2 = 0 then
-    writeln('La suma es un número par')
+    writeln('El número es mayor que 10');
+    writeln('Este es un bloque con más de una instrucción.');
+  end
+  else if n = 10 then
+  begin
+    writeln('El número es igual a 10');
+    writeln('Este es otro bloque con múltiples instrucciones.');
+  end
   else
-    writeln('La suma es un número impar');
+  begin
+    writeln('El número es menor que 10');
+    writeln('Este es un bloque else con varias instrucciones.');
+  end;
 end.

@@ -158,6 +158,26 @@ public interface MiniPascalListener extends ParseTreeListener {
 	 */
 	void exitEstructuraif(MiniPascalParser.EstructuraifContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MiniPascalParser#elif}.
+	 * @param ctx the parse tree
+	 */
+	void enterElif(MiniPascalParser.ElifContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MiniPascalParser#elif}.
+	 * @param ctx the parse tree
+	 */
+	void exitElif(MiniPascalParser.ElifContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MiniPascalParser#else_statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterElse_statement(MiniPascalParser.Else_statementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MiniPascalParser#else_statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitElse_statement(MiniPascalParser.Else_statementContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MiniPascalParser#buclefor}.
 	 * @param ctx the parse tree
 	 */

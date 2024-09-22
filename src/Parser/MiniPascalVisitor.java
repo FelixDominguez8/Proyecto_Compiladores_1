@@ -101,6 +101,18 @@ public interface MiniPascalVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEstructuraif(MiniPascalParser.EstructuraifContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MiniPascalParser#elif}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElif(MiniPascalParser.ElifContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MiniPascalParser#else_statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElse_statement(MiniPascalParser.Else_statementContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MiniPascalParser#buclefor}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

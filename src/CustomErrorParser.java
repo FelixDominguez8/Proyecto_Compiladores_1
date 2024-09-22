@@ -25,6 +25,7 @@ public class CustomErrorParser extends BaseErrorListener {
         traducido = traducido.replace("{'+', '-', '*', '/', 'mod', 'div', 'and', 'or', '=', '<>', '<', '<=', '>=', '>', ')', '[', '(.', '.'}","{'+', '-', '*', '/', 'mod', 'div', 'and', 'or', '=', '<>', '<', '<=', '>=', '>', ';'}");
         traducido = traducido.replace("{'until', ';', '('}","'until'");
         traducido = traducido.replace("{'begin', 'if', 'else', 'for', 'repeen', 'until', 'while', ';', NUM, IDENTIFIER}","'until'");
+        traducido = traducido.replace("no coincide la entrada 'else' se esperaba {'begin', 'end', 'if', 'for', 'repeen', 'while', ';', NUM, IDENTIFIER}","No se pone ';' en un if si le sigue un else");
         String error = "Error Sintactico en la línea " + line + ":" + charPositionInLine + " - " + traducido;
         System.err.println(error);
 
