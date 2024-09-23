@@ -6,6 +6,7 @@ begin
 end;
 
 procedure EjecutarSaludo;
+begin
     Saludar;  { Error sintáctico: falta el bloque 'begin' para el procedimiento }
 end;
 

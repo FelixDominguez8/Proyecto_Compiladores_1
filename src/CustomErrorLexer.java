@@ -10,8 +10,8 @@ public class CustomErrorLexer extends BaseErrorListener{
                             RecognitionException e) {
         String traducido = msg;
         traducido = traducido.replace("token recognition error at:","error reconociendo el token:");
-        if(traducido.contains("nend.'")) {
-            traducido = "cadena o comentario no cerrado correctamente";
+        if(traducido.contains("\\r")) {
+            traducido = "cadena no cerrada";
         }
         String mensaje = "Error Lexico en la línea " + line + ":" + charPositionInLine + " - " + traducido;
         System.err.println(mensaje);

@@ -18,7 +18,8 @@ begin
 
     { Ciclo for }
     suma := 0;  { Reiniciar suma }
-    for i := 1 to 5  { Error sintáctico: falta 'begin' }
+    for i := 1 to 5 do { Error sintáctico: falta 'begin' }
+    begin
         suma := suma + i;  { Error sintáctico: instrucción sin bloque begin...end } {X, talvez podria mejorar la descripcion del error}
     end;
 

@@ -1,4 +1,4 @@
-// Generated from C:/Users/Alberth/OneDrive - Universidad Tecnologica Centroamericana/Documents/Unitec/2024/III Trimestre/Compiladores_1/proyecto/proyecto_compi/Proyecto_Compiladores_1/src/MiniPascal.g4 by ANTLR 4.13.1
+// Generated from C:/Users/Lenovo I7/Documents/Compiladores 1/Proyecto_Compiladores1/src/MiniPascal.g4 by ANTLR 4.13.1
 package Parser;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -192,30 +192,6 @@ public class MiniPascalBaseListener implements MiniPascalListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitEstructuraif(MiniPascalParser.EstructuraifContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterElif(MiniPascalParser.ElifContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElif(MiniPascalParser.ElifContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterElse_statement(MiniPascalParser.Else_statementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitElse_statement(MiniPascalParser.Else_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

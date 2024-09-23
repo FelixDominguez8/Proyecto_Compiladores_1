@@ -1,4 +1,4 @@
-// Generated from C:/Users/Alberth/OneDrive - Universidad Tecnologica Centroamericana/Documents/Unitec/2024/III Trimestre/Compiladores_1/proyecto/proyecto_compi/Proyecto_Compiladores_1/src/MiniPascal.g4 by ANTLR 4.13.1
+// Generated from C:/Users/Lenovo I7/Documents/Compiladores 1/Proyecto_Compiladores1/src/MiniPascal.g4 by ANTLR 4.13.1
 package Parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -157,26 +157,6 @@ public interface MiniPascalListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitEstructuraif(MiniPascalParser.EstructuraifContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MiniPascalParser#elif}.
-	 * @param ctx the parse tree
-	 */
-	void enterElif(MiniPascalParser.ElifContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MiniPascalParser#elif}.
-	 * @param ctx the parse tree
-	 */
-	void exitElif(MiniPascalParser.ElifContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MiniPascalParser#else_statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterElse_statement(MiniPascalParser.Else_statementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MiniPascalParser#else_statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitElse_statement(MiniPascalParser.Else_statementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MiniPascalParser#buclefor}.
 	 * @param ctx the parse tree

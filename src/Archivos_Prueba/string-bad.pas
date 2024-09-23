@@ -5,7 +5,7 @@ var
 
 begin
     cadenaCorta := 'Esta cadena es demasiado larga';  { Error sintáctico: longitud excedida } {X deberia marcar este error}
-    cadenaInvalida := "Cadena inválida";  { Error léxico: comillas dobles en lugar de comillas simples }
+    cadenaInvalida := 'Cadena inválida';  { Error léxico: comillas dobles en lugar de comillas simples }
 
     writeln('Cadena Corta: ', cadenaCorta);
     writeln('Cadena Invalida: ', cadenaInvalida);

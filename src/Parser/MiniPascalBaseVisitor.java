@@ -1,4 +1,4 @@
-// Generated from C:/Users/Alberth/OneDrive - Universidad Tecnologica Centroamericana/Documents/Unitec/2024/III Trimestre/Compiladores_1/proyecto/proyecto_compi/Proyecto_Compiladores_1/src/MiniPascal.g4 by ANTLR 4.13.1
+// Generated from C:/Users/Lenovo I7/Documents/Compiladores 1/Proyecto_Compiladores1/src/MiniPascal.g4 by ANTLR 4.13.1
 package Parser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -117,20 +117,6 @@ public class MiniPascalBaseVisitor<T> extends AbstractParseTreeVisitor<T> implem
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitEstructuraif(MiniPascalParser.EstructuraifContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitElif(MiniPascalParser.ElifContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitElse_statement(MiniPascalParser.Else_statementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

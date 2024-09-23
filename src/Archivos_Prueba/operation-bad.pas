@@ -10,7 +10,7 @@ begin
     resultado := a + * b;  { Error sintáctico: uso de operadores consecutivos sin operandos }
     writeln('Resultado de a + * b: ', resultado);
 
-    resultado := a + b # c;  { Error léxico: el símbolo # no es un operador válido }
+    resultado := a + b #;  { Error léxico: el símbolo # no es un operador válido }
     writeln('Resultado de a + b # c: ', resultado);
 
     resultado := a / b *;  { Error sintáctico: falta un operando después del operador * } {X error no aparece}

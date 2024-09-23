@@ -1,4 +1,4 @@
-// Generated from C:/Users/Alberth/OneDrive - Universidad Tecnologica Centroamericana/Documents/Unitec/2024/III Trimestre/Compiladores_1/proyecto/proyecto_compi/Proyecto_Compiladores_1/src/MiniPascal.g4 by ANTLR 4.13.1
+// Generated from C:/Users/Lenovo I7/Documents/Compiladores 1/Proyecto_Compiladores1/src/MiniPascal.g4 by ANTLR 4.13.1
 package Parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -100,18 +100,6 @@ public interface MiniPascalVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitEstructuraif(MiniPascalParser.EstructuraifContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MiniPascalParser#elif}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElif(MiniPascalParser.ElifContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MiniPascalParser#else_statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitElse_statement(MiniPascalParser.Else_statementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MiniPascalParser#buclefor}.
 	 * @param ctx the parse tree
