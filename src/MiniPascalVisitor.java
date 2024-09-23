@@ -307,7 +307,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
 
     @Override
     public String visitDeclaracionproceso(MiniPascalParser.DeclaracionprocesoContext ctx) {
-        return ctx.PROCEDURE().getText() + " " +  ctx.IDENTIFIER().getText() + ctx.PARL().getText() + (ctx.listaformalparametros() != null ? visitListaformalparametros(ctx.listaformalparametros()) : "") + ctx.PARR().getText()
+        return ctx.PROCEDURE().getText() + " " +  ctx.IDENTIFIER().getText() + (ctx.PARL() != null ? ctx.PARL().getText() : "") + (ctx.listaformalparametros() != null ? visitListaformalparametros(ctx.listaformalparametros()) : "") + (ctx.PARR() != null ? ctx.PARR().getText() : "")
                 + ctx.SEMICOLON().getText() + visitBloque(ctx.bloque());
     }
     @Override
@@ -368,104 +368,25 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     @Override
     public String visitEstructuraif(MiniPascalParser.EstructuraifContext ctx) {
         StringBuilder resultado = new StringBuilder();
-        if (ctx.BEGIN() != null){
-            resultado.append(ctx.IF().getText());
-            resultado.append(" ");
-            resultado.append(visitExpresion(ctx.expresion()));
-            resultado.append(ctx.THEN().getText());
+        resultado.append(ctx.IF().getText());
+        resultado.append(" ");
+        resultado.append(visitExpresion(ctx.expresion()));
+        resultado.append(" ");
+        resultado.append(ctx.THEN().getText());
+        resultado.append("\n");
+        resultado.append(visitInstruccion(ctx.instruccion(0)));
+        if (ctx.ELSE() != null){
             resultado.append("\n");
-            resultado.append(ctx.BEGIN());
-            resultado.append("\n\t");
-            resultado.append(visitInstruccion(ctx.instruccion()));
+            resultado.append("\t");
+            resultado.append(ctx.ELSE().getText());
             resultado.append("\n");
-            resultado.append(ctx.END());
-            resultado.append(ctx.SEMICOLON());
-            resultado.append("\n");
-            if (ctx.elif() != null){
-                for (MiniPascalParser.ElifContext elif : ctx.elif()){
-                    resultado.append(visitElif(elif));
-                }
-            }
-            if (ctx.else_statement() != null){
-                visitElse_statement(ctx.else_statement());
-            }
-        } else {
-            resultado.append(ctx.IF().getText());
-            resultado.append(" ");
-            resultado.append(visitExpresion(ctx.expresion()));
-            resultado.append(ctx.THEN().getText());
-            resultado.append("\n\t");
-            resultado.append(visitInstruccion(ctx.instruccion()));
-            if (ctx.elif() != null){
-                for (MiniPascalParser.ElifContext elif : ctx.elif()){
-                    resultado.append(visitElif(elif));
-                }
-            }
-            if (ctx.else_statement() != null){
-                resultado.append(visitElse_statement(ctx.else_statement()));
-            }
-
+            resultado.append("\t");
+            resultado.append(visitInstruccion(ctx.instruccion(1)));
         }
         return resultado.toString();
     }
 
-    @Override
-    public String visitElif(MiniPascalParser.ElifContext ctx) {
-        StringBuilder resultado = new StringBuilder();
-        if(ctx.BEGIN() != null){
-            resultado.append(ctx.ELIF().getText());
-            resultado.append(" ");
-            visitExpresion(ctx.expresion());
-            resultado.append(" ");
-            resultado.append(ctx.THEN().getText());
-            resultado.append("\n");
-            resultado.append(ctx.BEGIN());
-            resultado.append("\n\t");
-            resultado.append(visitInstruccion(ctx.instruccion()));
-            resultado.append("\n");
-            resultado.append(ctx.END());
-            resultado.append(ctx.SEMICOLON());
-            resultado.append("\n");
-        } else {
-            resultado.append("\t");
-            resultado.append(ctx.ELIF().getText());
-            resultado.append(" ");
-            visitExpresion(ctx.expresion());
-            resultado.append(" ");
-            resultado.append(ctx.THEN().getText());
-            resultado.append("\n\t");
-            resultado.append(visitInstruccion(ctx.instruccion()));
-            resultado.append("\n");
-        }
-        return resultado.toString();
-    }
 
-    @Override
-    public String visitElse_statement(MiniPascalParser.Else_statementContext ctx){
-        if(ctx.BEGIN() != null){
-            StringBuilder resultado = new StringBuilder();
-
-            resultado.append(ctx.ELSE().getText());
-            resultado.append("\n");
-            resultado.append(ctx.BEGIN());
-            resultado.append("\n\t");
-            resultado.append(visitInstruccion(ctx.instruccion()));
-            resultado.append("\n");
-            resultado.append(ctx.END());
-            resultado.append(ctx.SEMICOLON());
-            resultado.append("\n");
-            return resultado.toString();
-        } else {
-            StringBuilder resultado = new StringBuilder();
-            resultado.append("\t");
-            resultado.append(ctx.ELSE().getText());
-            resultado.append("\n\t");
-            resultado.append(visitInstruccion(ctx.instruccion()));
-            resultado.append("\n");
-            return resultado.toString();
-        }
-
-    }
     @Override
     public String visitConstante(MiniPascalParser.ConstanteContext ctx) {
         if (ctx.signo() != null && ctx.NUM() != null) {
