@@ -16,6 +16,6 @@ begin
     resultado := Sumar(10, 5);
     writeln('Resultado de la suma: ', resultado);
 
-    Duplicar(resultado);  { Esto provocará un error por la definición anterior }
+    Duplicar(resultado);
     writeln('Resultado duplicado: ', resultado);
 end.
