@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Type {
 
     public enum BasicType {
-        INTEGER, CHAR, BOOLEAN, FUNCTION, PROCEDURE, STRING
+        INTEGER, CHAR, BOOLEAN, FUNCTION, PROCEDURE, STRING, ARRAY, CONSTANT
     }
 
     private BasicType baseType;

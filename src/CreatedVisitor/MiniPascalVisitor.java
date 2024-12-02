@@ -91,14 +91,16 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         String tipo = visitTipo(ctx.tipo());
         Type variableType;
         //Apartado para la tabla de simbolos
-        if (tipo.equals("integer")) {
+        if (tipo.equals("INTEGER")) {
             variableType = new Type(Type.BasicType.INTEGER);
-        } else if (tipo.equals("boolean")) {
+        } else if (tipo.equals("BOOLEAN")) {
             variableType = new Type(Type.BasicType.BOOLEAN);
-        } else if (tipo.equals("string")) {
+        } else if (tipo.equals("STRING")) {
             variableType = new Type(Type.BasicType.STRING);
-        } else {
+        } else if (tipo.equals("CHAR")) {
             variableType = new Type(Type.BasicType.CHAR);
+        } else {
+            variableType = new Type(Type.BasicType.ARRAY);
         }
 
         for (String identifier : identificadores.split(", ")) {
