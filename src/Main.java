@@ -47,6 +47,9 @@ public class Main {
             CreatedVisitor.MiniPascalVisitor visitor = new MiniPascalVisitor(scopeManager);
             String result = visitor.visit(tree);
 
+            System.out.println("Resultado del SymbolTable:");
+            System.out.println(scopeManager);
+
             System.out.println("Resultado del Visitor:");
             System.out.println(result);
 

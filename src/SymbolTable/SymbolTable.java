@@ -69,6 +69,10 @@ public class SymbolTable {
         return null;
     }
 
+    public List<Map<String, Symbol>> getScopes() {
+        return scopes;
+    }
+
     public int getScopeLevel() {
         return currentScopeIndex;
     }
@@ -84,6 +88,7 @@ public class SymbolTable {
     public boolean verifyIsFunctionOrProcedureSymbol(Symbol symbol) {
         return symbol instanceof FunctionSymbol || symbol instanceof ProcedureSymbol;
     }
+
 
     @Override
     public String toString() {
