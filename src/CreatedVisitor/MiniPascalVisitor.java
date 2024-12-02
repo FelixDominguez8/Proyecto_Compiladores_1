@@ -1,11 +1,20 @@
+package CreatedVisitor;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
+import SymbolTable.Type;
+import SymbolTable.FunctionSymbol;
+import SymbolTable.ProcedureSymbol;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import Parser.*;
-
+import SymbolTable.ScopeManager;
+import SymbolTable.Symbol;
 public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
+    private final ScopeManager scopeManager;
+
+    public MiniPascalVisitor(ScopeManager scopeManager) {
+        this.scopeManager = scopeManager;
+    }
     // Llama a visitar el encabezado y el bloque del programa
     @Override
     public String visitPrograma(MiniPascalParser.ProgramaContext ctx) {
@@ -80,6 +89,22 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
 
         String identificadores = visitListaidentificadores(ctx.listaidentificadores());
         String tipo = visitTipo(ctx.tipo());
+        Type variableType;
+        //Apartado para la tabla de simbolos
+        if (tipo.equals("integer")) {
+            variableType = new Type(Type.BasicType.INTEGER);
+        } else if (tipo.equals("boolean")) {
+            variableType = new Type(Type.BasicType.BOOLEAN);
+        } else if (tipo.equals("string")) {
+            variableType = new Type(Type.BasicType.STRING);
+        } else {
+            variableType = new Type(Type.BasicType.CHAR);
+        }
+
+        for (String identifier : identificadores.split(", ")) {
+            scopeManager.define(identifier, new Symbol(identifier, variableType));
+        }
+
         return identificadores + " : " + tipo;
     }
     // Visita el bloque de instrucciones
@@ -279,6 +304,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
 
     @Override
     public String visitSecciondeclaracionprocesoofuncion(MiniPascalParser.SecciondeclaracionprocesoofuncionContext ctx) {
+
         StringBuilder resultado = new StringBuilder();
         if (ctx.declaracionprocesoofuncion() != null){
             if (ctx.declaracionprocesoofuncion().declaracionfuncion() != null){
@@ -286,20 +312,41 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
                 resultado.append(declaracionFuncion);
                 String funcion = visitDeclaracionfuncion(ctx.declaracionprocesoofuncion().declaracionfuncion()) + "\n";
                 resultado.append(funcion);
+                // Salir del nivel de scope (1) para funciones locales de las funciones o procesos
+                scopeManager.exitScope();
             }
             if (ctx.declaracionprocesoofuncion().declaracionproceso() != null){
                 String declaracionProcedimiento = "----------------PROCEDURE DECLARATION:------------------------\n";
                 resultado.append(declaracionProcedimiento);
                 String procedimiento = visitDeclaracionproceso(ctx.declaracionprocesoofuncion().declaracionproceso()) + "\n";
                 resultado.append(procedimiento);
-
+                // Salir del nivel de scope (1) para funciones locales de las funciones o procesos
+                scopeManager.exitScope();
             }
         }
+
         return resultado.toString();
     }
 
     @Override
     public String visitDeclaracionfuncion(MiniPascalParser.DeclaracionfuncionContext ctx) {
+        /* ================== Tabla de Simbolos ================== */
+        String identificador = ctx.IDENTIFIER().getText();
+        Type returnType;
+        if (visitTipoidentificador(ctx.tipoidentificador()).equals("integer")) {
+            returnType = new Type(Type.BasicType.INTEGER);
+        } else if (visitTipoidentificador(ctx.tipoidentificador()).equals("boolean")) {
+            returnType = new Type(Type.BasicType.BOOLEAN);
+        } else if (visitTipoidentificador(ctx.tipoidentificador()).equals("string")) {
+            returnType = new Type(Type.BasicType.STRING);
+        } else {
+            returnType = new Type(Type.BasicType.CHAR);
+        }
+        FunctionSymbol functionSymbol = new FunctionSymbol(identificador,returnType);
+        scopeManager.define(identificador, functionSymbol);
+        //Aumentar el nivel de scope (1) para funciones locales de las funciones o procesos
+        scopeManager.enterScope();
+
         return ctx.FUNCTION().getText() + ctx.IDENTIFIER().getText() + ctx.PARL().getText() + (ctx.listaformalparametros() != null ? visitListaformalparametros(ctx.listaformalparametros()) : "") + ctx.PARR().getText()
                 + ctx.COLON().getText() + visitTipoidentificador(ctx.tipoidentificador()) + ctx.SEMICOLON().getText() + (ctx.bloque() != null ? visitBloque(ctx.bloque()) : "");
 
@@ -307,6 +354,13 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
 
     @Override
     public String visitDeclaracionproceso(MiniPascalParser.DeclaracionprocesoContext ctx) {
+        /* ================== Tabla de Simbolos ================== */
+        String identificador = ctx.IDENTIFIER().getText();
+
+        ProcedureSymbol procedureSymbol = new ProcedureSymbol(identificador);
+        scopeManager.define(identificador, procedureSymbol);
+        //Aumentar el nivel de scope (1) para funciones locales de las funciones o procesos
+        scopeManager.enterScope();
         return ctx.PROCEDURE().getText() + " " +  ctx.IDENTIFIER().getText() + (ctx.PARL() != null ? ctx.PARL().getText() : "") + (ctx.listaformalparametros() != null ? visitListaformalparametros(ctx.listaformalparametros()) : "") + (ctx.PARR() != null ? ctx.PARR().getText() : "")
                 + ctx.SEMICOLON().getText() + visitBloque(ctx.bloque());
     }

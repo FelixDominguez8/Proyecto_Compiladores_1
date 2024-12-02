@@ -1,3 +1,7 @@
+import CreatedVisitor.MiniPascalVisitor;
+import ErrorClass.CustomErrorLexer;
+import ErrorClass.CustomErrorParser;
+import SymbolTable.ScopeManager;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
 import java.io.File;
@@ -5,8 +9,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import Parser.*;
 import java.io.IOException;
-import java.util.List;
-import javax.swing.JFileChooser;
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -40,8 +43,8 @@ public class Main {
 
             System.out.println("Parsing completado exitosamente.");
 
-
-            MiniPascalVisitor visitor = new MiniPascalVisitor();
+            ScopeManager scopeManager = new ScopeManager();
+            CreatedVisitor.MiniPascalVisitor visitor = new MiniPascalVisitor(scopeManager);
             String result = visitor.visit(tree);
 
             System.out.println("Resultado del Visitor:");

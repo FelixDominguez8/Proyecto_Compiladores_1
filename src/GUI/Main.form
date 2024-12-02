@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.Main">
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="79" y="33" width="813" height="533"/>
+    </constraints>
+    <properties>
+      <alignmentX value="0.5"/>
+      <background color="-14866896"/>
+      <enabled value="true"/>
+      <foreground color="-15129808"/>
+      <inheritsPopupMenu value="false"/>
+      <maximumSize width="600" height="700"/>
+      <preferredSize width="1200" height="700"/>
+      <visible value="true"/>
+    </properties>
+    <border type="none" title-justification="2" title-position="1">
+      <font name="Comic Sans MS" size="26" style="1"/>
+      <title-color color="-5455918"/>
+    </border>
+    <children>
+      <grid id="8945b" binding="JPanelFiles" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <scrollpane id="225" binding="JScrollPaneTreeFile">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                <preferred-size width="160" height="1000"/>
+              </grid>
+            </constraints>
+            <properties>
+              <background color="-14472400"/>
+              <foreground color="-14472400"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="af1be" class="javax.swing.JTree" binding="files_tree" custom-create="true">
+                <constraints/>
+                <properties>
+                  <foreground color="-15129808"/>
+                  <preferredSize width="160" height="400"/>
+                  <rootVisible value="true"/>
+                  <rowHeight value="24"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+          <grid id="d2ae1" binding="JPanel_ButtonsCreate" layout-manager="GridBagLayout">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-14472400"/>
+              <foreground color="-2104859"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="b02b9" class="javax.swing.JButton" binding="abrirButton" default-binding="true">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <background color="-15259600"/>
+                  <foreground color="-131084"/>
+                  <text value="Abrir"/>
+                </properties>
+              </component>
+              <component id="21a11" class="javax.swing.JButton" binding="guardarButton" default-binding="true">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <background color="-15259600"/>
+                  <foreground color="-131084"/>
+                  <text value="Guardar"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <component id="3de34" class="javax.swing.JButton" binding="save_button">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <autoscrolls value="false"/>
+          <background color="-15259600"/>
+          <foreground color="-131084"/>
+          <text value="Guardar"/>
+        </properties>
+      </component>
+      <grid id="5b3dc" binding="Jpanelcompile" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-14472400"/>
+          <foreground color="-14866896"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="b88ae" class="javax.swing.JButton" binding="compilarButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <background color="-15259600"/>
+              <foreground color="-131084"/>
+              <horizontalAlignment value="0"/>
+              <text value="Compilar"/>
+              <verticalAlignment value="0"/>
+            </properties>
+          </component>
+          <component id="f225" class="javax.swing.JButton" binding="verDetallesButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <background color="-15259600"/>
+              <foreground color="-131084"/>
+              <text value="Ver Detalles"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <scrollpane id="c90e9" binding="jScrollpanelTextAreaCode">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-14866896"/>
+          <foreground color="-15129808"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="add48" class="javax.swing.JTextArea" binding="textArea_Code">
+            <constraints/>
+            <properties>
+              <background color="-14472400"/>
+              <foreground color="-14866896"/>
+              <wrapStyleWord value="false"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+      <scrollpane id="adf3e" binding="JScrollPaneLineText">
+        <constraints>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false">
+            <preferred-size width="10" height="18"/>
+          </grid>
+        </constraints>
+        <properties>
+          <background color="-14472400"/>
+          <foreground color="-15129808"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="4ba1a" class="javax.swing.JTextArea" binding="textArea_LineText">
+            <constraints/>
+            <properties>
+              <foreground color="-14472400"/>
+              <rows value="0"/>
+              <text value=""/>
+              <wrapStyleWord value="true"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+    </children>
+  </grid>
+  <inspectionSuppressions>
+    <suppress inspection="FormSpellChecking" id="27dc6"/>
+    <suppress inspection="NoLabelFor" id="225"/>
+  </inspectionSuppressions>
+</form>
