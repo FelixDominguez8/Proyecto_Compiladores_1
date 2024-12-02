@@ -21,12 +21,13 @@ begin
     resultado := Sumar(a, b);
     writeln('La suma de a y b es: ', resultado);
 
+    if resultado = 15
+        writeln('La suma es 15');  { Error sintáctico: falta 'then' }
+
     { Error sintáctico: falta 'begin' en el ciclo for }
     for a := 1 to 5
         resultado := resultado + a;  { Error sintáctico: instrucción sin bloque begin...end }
     end;
-
-    if resultado = 15 writeln('La suma es 15');  { Error sintáctico: falta 'then' }
 
     { Ejemplo de while }
     a := 1;
