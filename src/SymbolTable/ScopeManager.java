@@ -23,6 +23,9 @@ public class ScopeManager {
         symbolTable.insert(identifier, symbol);
     }
 
+    public SymbolTable getSymbolTable() {
+        return symbolTable;
+    }
 
     @Override
     public String toString() {

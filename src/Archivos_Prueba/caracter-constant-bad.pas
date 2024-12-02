@@ -7,6 +7,6 @@ begin
     caracter := "a";  { Error léxico: uso de comillas dobles en lugar de comillas simples }
     cadena := 'Número de cuenta; { Error sintáctico: falta la comilla de cierre en la constante de string }
 
-    writeln('Caracter: ', caracter);
+    writeln('Caracter: ', caracter); {OTRO COMMENT}
     writeln('Cadena: ', cadena);
 end.

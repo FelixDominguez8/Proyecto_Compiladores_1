@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.Main">
-  <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-    <margin top="0" left="0" bottom="0" right="0"/>
+  <grid id="27dc6" binding="mainPanel" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="79" y="33" width="813" height="533"/>
+      <xy x="79" y="33" width="1416" height="533"/>
     </constraints>
     <properties>
       <alignmentX value="0.5"/>
@@ -12,6 +11,7 @@
       <foreground color="-15129808"/>
       <inheritsPopupMenu value="false"/>
       <maximumSize width="600" height="700"/>
+      <opaque value="true"/>
       <preferredSize width="1200" height="700"/>
       <visible value="true"/>
     </properties>
@@ -24,6 +24,7 @@
         <margin top="0" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="1.0"/>
         </constraints>
         <properties/>
         <border type="none"/>
@@ -35,15 +36,17 @@
               </grid>
             </constraints>
             <properties>
-              <background color="-14472400"/>
-              <foreground color="-14472400"/>
+              <background color="-5455918"/>
+              <foreground color="-15791862"/>
             </properties>
             <border type="none"/>
             <children>
               <component id="af1be" class="javax.swing.JTree" binding="files_tree" custom-create="true">
                 <constraints/>
                 <properties>
+                  <background color="-15259600"/>
                   <foreground color="-15129808"/>
+                  <opaque value="true"/>
                   <preferredSize width="160" height="400"/>
                   <rootVisible value="true"/>
                   <rowHeight value="24"/>
@@ -72,7 +75,7 @@
                   <text value="Abrir"/>
                 </properties>
               </component>
-              <component id="21a11" class="javax.swing.JButton" binding="guardarButton" default-binding="true">
+              <component id="21a11" class="javax.swing.JButton" binding="editarButton" default-binding="true">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -80,7 +83,7 @@
                 <properties>
                   <background color="-15259600"/>
                   <foreground color="-131084"/>
-                  <text value="Guardar"/>
+                  <text value="Editar"/>
                 </properties>
               </component>
             </children>
@@ -90,6 +93,7 @@
       <component id="3de34" class="javax.swing.JButton" binding="save_button">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
           <autoscrolls value="false"/>
@@ -100,7 +104,8 @@
       </component>
       <grid id="5b3dc" binding="Jpanelcompile" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
         <constraints>
-          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="1.0" weighty="0.0"/>
         </constraints>
         <properties>
           <background color="-14472400"/>
@@ -130,7 +135,8 @@
       </grid>
       <scrollpane id="c90e9" binding="jScrollpanelTextAreaCode">
         <constraints>
-          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="1.0" weighty="1.0"/>
         </constraints>
         <properties>
           <background color="-14866896"/>
@@ -142,31 +148,9 @@
             <constraints/>
             <properties>
               <background color="-14472400"/>
-              <foreground color="-14866896"/>
+              <editable value="false"/>
+              <foreground color="-131084"/>
               <wrapStyleWord value="false"/>
-            </properties>
-          </component>
-        </children>
-      </scrollpane>
-      <scrollpane id="adf3e" binding="JScrollPaneLineText">
-        <constraints>
-          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="0" anchor="8" fill="2" indent="0" use-parent-layout="false">
-            <preferred-size width="10" height="18"/>
-          </grid>
-        </constraints>
-        <properties>
-          <background color="-14472400"/>
-          <foreground color="-15129808"/>
-        </properties>
-        <border type="none"/>
-        <children>
-          <component id="4ba1a" class="javax.swing.JTextArea" binding="textArea_LineText">
-            <constraints/>
-            <properties>
-              <foreground color="-14472400"/>
-              <rows value="0"/>
-              <text value=""/>
-              <wrapStyleWord value="true"/>
             </properties>
           </component>
         </children>
