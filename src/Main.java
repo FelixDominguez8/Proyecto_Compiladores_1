@@ -1,3 +1,7 @@
+import IR.TACInstructionsIR;
+import IR.VisitorTAC;
+import IR.TACBaseInstruction;
+import SymbolTable.SymbolTable;
 import CreatedVisitor.MiniPascalVisitor;
 import ErrorClass.CustomErrorLexer;
 import ErrorClass.CustomErrorParser;
@@ -9,7 +13,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import Parser.*;
 import java.io.IOException;
+import java.util.List;
 import javax.swing.*;
+import Optimizador.TACOptimizer;
 
 public class Main {
     public static void main(String[] args) {
@@ -52,6 +58,29 @@ public class Main {
 
             System.out.println("Resultado del Visitor:");
             System.out.println(result);
+
+            SymbolTable globalSymbolTable = new SymbolTable();
+
+            TACInstructionsIR ir = new TACInstructionsIR();
+            VisitorTAC irVisitor = new VisitorTAC(ir, globalSymbolTable);
+            irVisitor.visit(tree);  // Ahora visita el árbol de sintaxis
+
+            TACOptimizer optimizer = new TACOptimizer(ir.getInstructions());
+            List<TACBaseInstruction> optimizedInstructions = optimizer.optimize();
+
+            // Print the generated TAC instructions
+            List<TACBaseInstruction> instructions = ir.getInstructions();
+            System.out.println("Generated TAC Instructions:");
+            for (TACBaseInstruction instruction : instructions) {
+                System.out.println(instruction);
+            }
+            System.out.println("");
+            System.out.println("");
+            System.out.println("");
+            System.out.println("Optimized TAC Instructions:");
+            for (TACBaseInstruction instruction : optimizedInstructions) {
+                System.out.println(instruction);
+            }
 
 
         } catch (IOException e) {
