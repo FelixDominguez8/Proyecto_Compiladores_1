@@ -65,15 +65,16 @@ public class Main {
             VisitorTAC irVisitor = new VisitorTAC(ir, globalSymbolTable);
             irVisitor.visit(tree);  // Ahora visita el árbol de sintaxis
 
-            TACOptimizer optimizer = new TACOptimizer(ir.getInstructions());
-            List<TACBaseInstruction> optimizedInstructions = optimizer.optimize();
-
             // Print the generated TAC instructions
             List<TACBaseInstruction> instructions = ir.getInstructions();
             System.out.println("Generated TAC Instructions:");
             for (TACBaseInstruction instruction : instructions) {
                 System.out.println(instruction);
             }
+
+            TACOptimizer optimizer = new TACOptimizer(ir.getInstructions());
+            List<TACBaseInstruction> optimizedInstructions = optimizer.optimize();
+
             System.out.println("");
             System.out.println("");
             System.out.println("");
