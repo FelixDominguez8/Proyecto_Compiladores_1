@@ -12,6 +12,7 @@ public class VisitorTAC extends MiniPascalBaseVisitor<Void> {
     private SymbolTable symbolTable;
     private int tempVarCounter = 0;
     private int labelCount = 0;
+    String ParametroActual = "";
 
     public VisitorTAC(TACInstructionsIR ir, SymbolTable symbolTable) {
         this.ir = ir;
@@ -19,7 +20,7 @@ public class VisitorTAC extends MiniPascalBaseVisitor<Void> {
     }
 
     private String generateTempVariable() {
-        return "_t" + tempVarCounter++;
+        return "%_t" + tempVarCounter++;
     }
 
     private String generateLabel(String prefix) {
@@ -32,7 +33,7 @@ public class VisitorTAC extends MiniPascalBaseVisitor<Void> {
         visit(ctx.expresion());
         List<TACBaseInstruction> instructions = ir.getInstructions();
         if (!instructions.isEmpty()) {
-            String tempVar = instructions.get(instructions.size() - 1).getResult();
+            String tempVar = instructions.get(instructions.size() - 1).getOperand1();
             ir.addInstruction(new TACBaseInstruction("ASSIGN", variable, tempVar, null));
         }
         return null;
@@ -122,7 +123,8 @@ public class VisitorTAC extends MiniPascalBaseVisitor<Void> {
     public Void visitFactor(MiniPascalParser.FactorContext ctx) {
         if (ctx.variable() != null) {
             String varName = ctx.variable().getText();
-            ir.addInstruction(new TACBaseInstruction("LOAD", varName, varName, null));
+            String resultTempVar = generateTempVariable();
+            ir.addInstruction(new TACBaseInstruction("LOAD", resultTempVar, varName, null));
         } else if (ctx.expresion() != null) {
             visit(ctx.expresion());
         } else if (ctx.designarfuncion() != null) {
@@ -130,7 +132,7 @@ public class VisitorTAC extends MiniPascalBaseVisitor<Void> {
         } else if (ctx.constante() != null) {
             String constValue = ctx.constante().getText();
             String tempVar = generateTempVariable();
-            ir.addInstruction(new TACBaseInstruction("LOAD_CONST", tempVar, constValue, null));
+            ir.addInstruction(new TACBaseInstruction("LOAD_CONST", null, constValue, null));
         } else if (ctx.NOT() != null) {
             visit(ctx.factor());
             List<TACBaseInstruction> instructions = ir.getInstructions();
@@ -262,7 +264,10 @@ public class VisitorTAC extends MiniPascalBaseVisitor<Void> {
         if (ctx.listaparametros() != null) {
             visit(ctx.listaparametros());
         }
-        ir.addInstruction(new TACBaseInstruction("CALL", procName, null, null));
+        List<TACBaseInstruction> instructions = ir.getInstructions();
+        String constValue = instructions.get(instructions.size() - 1).getResult();
+        String constValue2 = instructions.get(instructions.size() - 1).getOperand1(); //Regresare
+        ir.addInstruction(new TACBaseInstruction("CALL", procName, constValue, "%d"));
         return null;
     }
 
@@ -340,8 +345,8 @@ public class VisitorTAC extends MiniPascalBaseVisitor<Void> {
         visit(ctx.expresion());
         List<TACBaseInstruction> instructions = ir.getInstructions();
         if (!instructions.isEmpty()) {
-            String paramValue = instructions.get(instructions.size() - 1).getResult();
-            ir.addInstruction(new TACBaseInstruction("PARAM", paramValue, null, null));
+            String paramValue = instructions.get(instructions.size() - 1).getOperand1();
+            ParametroActual = paramValue;
         }
         return null;
     }
@@ -363,5 +368,6 @@ public class VisitorTAC extends MiniPascalBaseVisitor<Void> {
         }
         return null;
     }
+
 
 }

@@ -14,14 +14,6 @@ public class TACBaseInstruction {
         this.operand2 = operand2; // Can be null if the operation is unary
     }
 
-    public TACBaseInstruction(String load, String operand1, Object operand11) {
-        //create a new TACBaseInstruction object
-        this.operation = load;
-        this.operand1 = operand1;
-        this.operand2 = (String) operand11;
-
-    }
-
     // Getter for operation
     public String getOperation() {
         return operation;
@@ -65,7 +57,7 @@ public class TACBaseInstruction {
     // toString method to provide a visual and pretty representation of the TAC instruction
     @Override
     public String toString() {
-        return operation + " " + result + ", " + operand1 + (operand2 != null ? ", " + operand2 : "");
+        return operation + " " + result + ", " + operand1 + ", " + operand2;
     }
 
     public int getOperandsCount() {

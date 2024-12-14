@@ -13,11 +13,16 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import Parser.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import Optimizador.TACOptimizer;
+import LLVM.LLVMFileHandler;
+import LLVM.LLVMOutput;
+import LLVM.LLVMTranslator;
 
 public class Main {
+
     public static void main(String[] args) {
         try {
             InputStream is = System.in;
@@ -82,6 +87,30 @@ public class Main {
             for (TACBaseInstruction instruction : optimizedInstructions) {
                 System.out.println(instruction);
             }
+
+            System.out.println("");
+            System.out.println("");
+            System.out.println("");
+
+            LLVMTranslator llvmTranslator = new LLVMTranslator();
+            LLVMFileHandler llvmFileHandler = new LLVMFileHandler();
+            LLVMOutput llvmOutput = new LLVMOutput();
+            // Translate TAC instructions to LLVM IR
+            List<String> llvmInstructions = new ArrayList<>();
+            llvmInstructions = llvmTranslator.translateAll(optimizedInstructions);
+
+            System.out.println("Generated LLVM Instructions:");
+            for (String llvmInstruction : llvmInstructions) {
+                System.out.println(llvmInstruction);
+            }
+
+            String llvmFilename = "output.ll";
+            String inputFilename = "myProgram.pas"; // Replace with the actual input file name
+            llvmFileHandler.writeToFile(llvmFilename, llvmInstructions, inputFilename);
+
+            // Compile LLVM IR to an executable
+            String executableName = "output.exe";
+            llvmOutput.compile(llvmFilename, executableName, llvmInstructions);
 
 
         } catch (IOException e) {
