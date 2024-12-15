@@ -1,11 +1,13 @@
 package SymbolTable;
+import ErrorClass.SemanticErrorManager;
 import ErrorClass.SymbolTableError;
 
 public class ScopeManager {
     private SymbolTable symbolTable;
+    private SemanticErrorManager semanticErrorManager;
+    public ScopeManager(SemanticErrorManager semanticErrorManager) {
+        this.symbolTable = new SymbolTable(semanticErrorManager);
 
-    public ScopeManager() {
-        this.symbolTable = new SymbolTable();
     }
 
     public void enterScope() {
@@ -17,9 +19,7 @@ public class ScopeManager {
     }
 
     public void define(String identifier, Symbol symbol) {
-        if (symbolTable.existsInCurrentScope(identifier)) {
-            throw new SymbolTableError("Símbolo redefinido en el scope actual: " + identifier);
-        }
+
         symbolTable.insert(identifier, symbol);
     }
 

@@ -5,11 +5,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ErrorClass.SemanticError;
+import ErrorClass.SemanticErrorManager;
 import ErrorClass.SymbolTableError;
 
 public class SymbolTable {
     private List<Map<String, Symbol>> scopes;
     private int currentScopeIndex;
+    private int line;
+    private int column;
+    private SemanticErrorManager semanticErrorManager;
+
+
+    public SymbolTable(SemanticErrorManager semanticErrorManager) {
+        this.scopes = new ArrayList<>();
+        this.currentScopeIndex = 0;
+        scopes.add(new HashMap<>());
+        this.semanticErrorManager = semanticErrorManager;
+    }
 
     public SymbolTable() {
         this.scopes = new ArrayList<>();
@@ -26,7 +39,7 @@ public class SymbolTable {
 
     public void exitScope() {
         if (currentScopeIndex == 0) {
-            throw new SymbolTableError("No se pueden cerrar más scopes, ya estás en el nivel global.");
+            System.out.println("Error: No se puede salir del scope global.");
         }
         currentScopeIndex--;
     }
@@ -34,7 +47,7 @@ public class SymbolTable {
     public void insert(String identifier, Symbol symbol) {
         Map<String, Symbol> currentScope = scopes.get(currentScopeIndex);
         if (currentScope.containsKey(identifier)) {
-            throw new SymbolTableError("Símbolo ya definido en el scope actual: " + identifier);
+            semanticErrorManager.addError(new SemanticError("Semantic Error", line, column, "El identificador " + identifier + " ya ha sido declarado."));
         }
 
         if (isProcedureOrFunctionScope()) {
@@ -47,11 +60,13 @@ public class SymbolTable {
                 }
             }
         }
+
+
         currentScope.put(identifier, symbol);
-    }
+     }
 
     public Symbol getPreviousSymbolPeak() {
-        // Buscar desde el scope actual hacia atrás
+
         for (int i = currentScopeIndex; i >= 0; i--) {
             Map<String, Symbol> currentScope = scopes.get(i);
 
@@ -67,6 +82,27 @@ public class SymbolTable {
 
         // No se encontró un símbolo válido
         return null;
+    }
+
+    public void verifyOperationType(Symbol symbol, String operationType){
+        if(!symbol.getType().getBaseType().toString().equalsIgnoreCase(operationType)){
+            semanticErrorManager.addError(new SemanticError("Semantic Error, error de Tipos", line, column, "Se esperaba " + symbol.getType().getBaseType() + " pero se encontró " + operationType));
+        }
+    }
+
+    public Symbol getSymbol(String identifier) {
+        if (currentScopeIndex == 0){
+            for (int i = currentScopeIndex; i >= 0; i--) {
+                Map<String, Symbol> currentScope = scopes.get(i);
+                if (currentScope.containsKey(identifier)) {
+                    return currentScope.get(identifier);
+                }
+            }
+            return null;
+        } else{
+            return null;
+        }
+
     }
 
     public List<Map<String, Symbol>> getScopes() {
@@ -85,10 +121,44 @@ public class SymbolTable {
         return currentScopeIndex == 1;
     }
 
+    public void validateSymbolExist(Symbol symbol){
+        for (int i = currentScopeIndex; i >= 0; i--) {
+            Map<String, Symbol> currentScope = scopes.get(i);
+            if (!currentScope.containsValue(symbol)) {
+                semanticErrorManager.addError(new SemanticError("Semantic Error", line, column, "El identificador " + symbol.getIdentifier() + " no ha sido declarado."));
+            }
+        }
+    }
+
     public boolean verifyIsFunctionOrProcedureSymbol(Symbol symbol) {
         return symbol instanceof FunctionSymbol || symbol instanceof ProcedureSymbol;
     }
 
+    public Symbol lookup(String identifier) {
+        for (int i = currentScopeIndex; i >= 0; i--) {
+            Map<String, Symbol> currentScope = scopes.get(i);
+            if (currentScope.containsKey(identifier)) {
+                return currentScope.get(identifier);
+            }
+        }
+        return null;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
+    }
 
     @Override
     public String toString() {
