@@ -1,10 +1,9 @@
+import ErrorClass.*;
 import IR.TACInstructionsIR;
 import IR.VisitorTAC;
 import IR.TACBaseInstruction;
 import SymbolTable.SymbolTable;
 import CreatedVisitor.MiniPascalVisitor;
-import ErrorClass.CustomErrorLexer;
-import ErrorClass.CustomErrorParser;
 import SymbolTable.ScopeManager;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -25,6 +24,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+            ErrorHandler errorHandler = new ErrorHandler();
             InputStream is = System.in;
             File selectedFile = chooseFile();
             if (selectedFile != null) {
@@ -42,34 +42,38 @@ public class Main {
             CharStream input = CharStreams.fromStream(is);
             MiniPascalLexer lexer = new MiniPascalLexer(input);
             lexer.removeErrorListeners();
-            lexer.addErrorListener(new CustomErrorLexer());
+            lexer.addErrorListener(new CustomErrorLexer(errorHandler));
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MiniPascalParser parser = new MiniPascalParser(tokens);
 
             parser.removeErrorListeners();
-            parser.addErrorListener(new CustomErrorParser());
+            parser.addErrorListener(new CustomErrorParser(errorHandler));
           
             ParseTree tree = parser.programa();
 
 
             System.out.println("Parsing completado exitosamente.");
-
-            ScopeManager scopeManager = new ScopeManager();
+            SemanticErrorManager semanticErrorManager = new SemanticErrorManager();
+            ScopeManager scopeManager = new ScopeManager(semanticErrorManager);
             CreatedVisitor.MiniPascalVisitor visitor = new MiniPascalVisitor(scopeManager);
             String result = visitor.visit(tree);
-
+            semanticErrorManager.deleteRepeat();
+            System.out.println("=====================================Resultado del SemanticErrorManager:===============================");
+            System.out.println(semanticErrorManager);
             System.out.println("Resultado del SymbolTable:");
             System.out.println(scopeManager);
 
             System.out.println("Resultado del Visitor:");
             System.out.println(result);
 
-            SymbolTable globalSymbolTable = new SymbolTable();
 
             TACInstructionsIR ir = new TACInstructionsIR();
-            VisitorTAC irVisitor = new VisitorTAC(ir, globalSymbolTable);
+            VisitorTAC irVisitor = new VisitorTAC(ir, scopeManager.getSymbolTable());
             irVisitor.visit(tree);  // Ahora visita el árbol de sintaxis
-
+            //ERORES SEMANTICOS
+            for (SemanticError error : semanticErrorManager.getErrors()) {
+                System.err.println(error);
+            }
             // Print the generated TAC instructions
             List<TACBaseInstruction> instructions = ir.getInstructions();
             System.out.println("Generated TAC Instructions:");

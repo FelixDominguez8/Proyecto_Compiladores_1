@@ -90,6 +90,8 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         String identificadores = visitListaidentificadores(ctx.listaidentificadores());
         String tipo = visitTipo(ctx.tipo());
         Type variableType;
+        int line = ctx.getStart().getLine();
+        int column = ctx.getStart().getCharPositionInLine();
         //Apartado para la tabla de simbolos
         if (tipo.equals("INTEGER") || tipo.equals("integer")) {
 
@@ -105,6 +107,8 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         }
 
         for (String identifier : identificadores.split(", ")) {
+            scopeManager.getSymbolTable().setLine(line);
+            scopeManager.getSymbolTable().setColumn(column);
             scopeManager.define(identifier, new Symbol(identifier, variableType));
         }
 
@@ -182,6 +186,25 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
 
         String variable = visitVariable(ctx.variable());
         String expresion = visitExpresion(ctx.expresion());
+        String noSpaceExpresion = expresion.replaceAll("\\s+","");
+        String operationType = "";
+        if (noSpaceExpresion.equalsIgnoreCase("true") || noSpaceExpresion.equalsIgnoreCase("false")) {
+            operationType = "boolean";
+        } else{
+            operationType = "integer";
+        }
+        //quitar espacios
+        String noSpaceVariable = variable.replaceAll("\\s+","");
+        Symbol symbol = scopeManager.getSymbolTable().getSymbol(noSpaceVariable);
+
+        scopeManager.getSymbolTable().setLine(ctx.start.getLine());
+        scopeManager.getSymbolTable().setColumn(ctx.start.getCharPositionInLine());
+        if (symbol != null) {
+            //verificar si esta instancia
+            scopeManager.getSymbolTable().validateSymbolExist(symbol);
+            scopeManager.getSymbolTable().verifyOperationType(symbol, operationType);
+        }
+
         return variable + " := " + expresion + ";";
     }
 
@@ -552,9 +575,13 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     @Override
     public String visitBuclefor(MiniPascalParser.BucleforContext ctx) {
         StringBuilder resultado = new StringBuilder();
-        ctx.FOR().getText();
+        resultado.append(ctx.FOR().getText());
         resultado.append(" ");
         resultado.append(ctx.IDENTIFIER().getText());
+        scopeManager.getSymbolTable().setLine(ctx.start.getLine());
+        scopeManager.getSymbolTable().setColumn(ctx.start.getCharPositionInLine());
+        Symbol symbol = scopeManager.getSymbolTable().lookup(ctx.IDENTIFIER().getText());
+        scopeManager.getSymbolTable().verifyOperationType(symbol, "integer");
         resultado.append(" ");
         resultado.append(ctx.ASSIGN().getText());
         resultado.append(" ");
