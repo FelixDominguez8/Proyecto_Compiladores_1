@@ -267,6 +267,7 @@ public class Compilador extends javax.swing.JFrame {
             ScopeManager scopeManager = new ScopeManager(semanticErrorManager);
             CreatedVisitor.MiniPascalVisitor visitor = new MiniPascalVisitor(scopeManager);
             String result = visitor.visit(tree);
+            scopeManager.getSymbolTable().valiteSymbolIsInitialized();
             semanticErrorManager.deleteRepeat();
             System.out.println("=====================================Resultado del SemanticErrorManager:===============================");
             System.out.println(semanticErrorManager);

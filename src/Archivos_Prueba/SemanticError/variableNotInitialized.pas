@@ -1,0 +1,6 @@
+PROGRAM Test;
+VAR
+  x: INTEGER;
+BEGIN
+  WRITE(x);
+END.

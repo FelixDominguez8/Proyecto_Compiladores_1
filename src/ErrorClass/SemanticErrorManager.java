@@ -19,11 +19,14 @@ public class SemanticErrorManager {
 
     public void deleteRepeat(){
         //recorer la lista de errores con un for
-        for (int i = 0; i < semanticErrors.size(); i++){
-            if (semanticErrors.get(i).getLine() == semanticErrors.get(i+1).getLine() && semanticErrors.get(i).getColumn() == semanticErrors.get(i+1).getColumn()){
-                semanticErrors.remove(i+1);
+        if (semanticErrors.size() > 1){;
+            for (int i = 0; i < semanticErrors.size(); i++){
+                if (semanticErrors.get(i).getLine() == semanticErrors.get(i+1).getLine() && semanticErrors.get(i).getColumn() == semanticErrors.get(i+1).getColumn()){
+                    semanticErrors.remove(i+1);
+                }
             }
         }
+
     }
 
     @Override

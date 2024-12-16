@@ -6,6 +6,7 @@ package GUI2;
 
 import SymbolTable.SymbolTable;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +53,7 @@ public class Detalles extends javax.swing.JFrame {
         jScrollPane_SymbolTable = new javax.swing.JScrollPane();
         jTable_SymbolTable = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 
         jTextArea_Errors.setColumns(20);
         jTextArea_Errors.setRows(5);

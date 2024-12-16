@@ -104,6 +104,45 @@ public class SymbolTable {
         }
 
     }
+    public Symbol getSymbolbyIdentifier(String identifier){
+        for (int i = 0 ; i < scopes.size(); i++){
+            Map<String, Symbol> currentScope = scopes.get(i);
+            if (currentScope.containsKey(identifier)){
+                return currentScope.get(identifier);
+            }
+        }
+        return null;
+    }
+    public void CheckSymbolScopeLevel(Symbol symbol, int actualScopeVisitor){
+        for (int i = 0; i < scopes.size(); i++) {
+            Map<String, Symbol> currentScope = scopes.get(i);
+            if (currentScope.containsValue(symbol) && i != actualScopeVisitor && symbol.getType().getBaseType() != Type.BasicType.FUNCTION && symbol.getType().getBaseType() != Type.BasicType.PROCEDURE) {
+                semanticErrorManager.addError(new SemanticError("Semantic Error", line, column, "El identificador " + symbol.getIdentifier() + " no ha sido declarado en este scope."));
+            }
+        }
+
+    }
+
+    public void setSymbolValue(Symbol symbol, String value) {
+        for (int i = 0; i < scopes.size(); i++) {
+            Map<String, Symbol> currentScope = scopes.get(i);
+            if (currentScope.containsValue(symbol)) {
+                symbol.setValue(value);
+                return;
+            }
+        }
+    }
+
+    public void valiteSymbolIsInitialized(){
+        for (int i = 0; i < scopes.size(); i++){
+            Map<String, Symbol> currentScope = scopes.get(i);
+            for (Symbol symbol : currentScope.values()){
+                if (symbol.getValue() == null){
+                    semanticErrorManager.addError(new SemanticError("Semantic Error", line, column, "El identificador " + symbol.getIdentifier() + " no ha sido inicializado."));
+                }
+            }
+        }
+    }
 
     public List<Map<String, Symbol>> getScopes() {
         return scopes;
@@ -119,6 +158,10 @@ public class SymbolTable {
 
     public boolean isProcedureOrFunctionScope() {
         return currentScopeIndex == 1;
+    }
+
+    public void badOperationType(){
+        semanticErrorManager.addError(new SemanticError("Semantic Error", line, column, "Operación no permitida con los tipos de datos"));
     }
 
     public void validateSymbolExist(Symbol symbol){

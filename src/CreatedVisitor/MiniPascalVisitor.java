@@ -11,6 +11,8 @@ import SymbolTable.ScopeManager;
 import SymbolTable.Symbol;
 public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     private final ScopeManager scopeManager;
+    private int actualScope = 0;
+    private boolean activeProcesooFuncion = false;
 
     public MiniPascalVisitor(ScopeManager scopeManager) {
         this.scopeManager = scopeManager;
@@ -58,6 +60,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
 
         if (ctx.bloqueinstruccion() != null){
             String bloqueInstruccion = "\n----------------PROGRAM INSTRUCTIONS:------------------------\n";
+
             resultado.append(bloqueInstruccion);
             resultado.append(visitBloqueinstruccion(ctx.bloqueinstruccion()));
 
@@ -117,7 +120,6 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     // Visita el bloque de instrucciones
     @Override
     public String visitBloqueinstruccion(MiniPascalParser.BloqueinstruccionContext ctx) {
-
         StringBuilder resultado = new StringBuilder("begin\n");
         resultado.append("\t");
         resultado.append(visitInstrucciones(ctx.instrucciones()));
@@ -196,13 +198,29 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         //quitar espacios
         String noSpaceVariable = variable.replaceAll("\\s+","");
         Symbol symbol = scopeManager.getSymbolTable().getSymbol(noSpaceVariable);
-
+        Symbol symbol2 = scopeManager.getSymbolTable().getSymbolbyIdentifier(noSpaceVariable);
         scopeManager.getSymbolTable().setLine(ctx.start.getLine());
         scopeManager.getSymbolTable().setColumn(ctx.start.getCharPositionInLine());
         if (symbol != null) {
             //verificar si esta instancia
             scopeManager.getSymbolTable().validateSymbolExist(symbol);
             scopeManager.getSymbolTable().verifyOperationType(symbol, operationType);
+        }
+        if (symbol2 != null) {
+            scopeManager.getSymbolTable().setSymbolValue(symbol2, expresion);
+        }
+
+        if(activeProcesooFuncion){
+            scopeManager.getSymbolTable().setLine(ctx.start.getLine());
+            scopeManager.getSymbolTable().setColumn(ctx.start.getCharPositionInLine());
+            if (ctx.expresion().expresionsimple().operadoraditivo() != null){
+                if (symbol2 instanceof FunctionSymbol){
+                    if(((FunctionSymbol) symbol2).getReturnType().toString() != "integer") {
+                        scopeManager.getSymbolTable().badOperationType();
+                    }
+                }
+            }
+
         }
 
         return variable + " := " + expresion + ";";
@@ -258,6 +276,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     }
     @Override
     public String visitVariable(MiniPascalParser.VariableContext ctx) {
+        String line = String.valueOf(ctx.start.getLine());
         StringBuilder resultado = new StringBuilder(ctx.IDENTIFIER(0).getText() + " ");
 
         for (int i = 1; i < ctx.IDENTIFIER().size(); i++) {
@@ -268,6 +287,13 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
             for (MiniPascalParser.ExpresionContext expr : ctx.expresion()) {
                 resultado.append("[").append(visitExpresion(expr)).append("]");
             }
+        }
+        String noSpaceVariable = resultado.toString().replaceAll("\\s+","");
+        Symbol symbol = scopeManager.getSymbolTable().getSymbolbyIdentifier(noSpaceVariable);
+        if (symbol != null) {
+            scopeManager.getSymbolTable().setLine(ctx.start.getLine());
+            scopeManager.getSymbolTable().setColumn(ctx.start.getCharPositionInLine());
+            scopeManager.getSymbolTable().CheckSymbolScopeLevel(symbol, actualScope);
         }
 
         return resultado.toString();
@@ -330,7 +356,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
 
     @Override
     public String visitSecciondeclaracionprocesoofuncion(MiniPascalParser.SecciondeclaracionprocesoofuncionContext ctx) {
-
+        activeProcesooFuncion = true;
         StringBuilder resultado = new StringBuilder();
         if (ctx.declaracionprocesoofuncion() != null){
             if (ctx.declaracionprocesoofuncion().declaracionfuncion() != null){
@@ -340,6 +366,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
                 resultado.append(funcion);
                 // Salir del nivel de scope (1) para funciones locales de las funciones o procesos
                 scopeManager.exitScope();
+                actualScope = 0;
             }
             if (ctx.declaracionprocesoofuncion().declaracionproceso() != null){
                 String declaracionProcedimiento = "----------------PROCEDURE DECLARATION:------------------------\n";
@@ -348,9 +375,10 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
                 resultado.append(procedimiento);
                 // Salir del nivel de scope (1) para funciones locales de las funciones o procesos
                 scopeManager.exitScope();
+                actualScope = 0;
             }
         }
-
+        activeProcesooFuncion = false;
         return resultado.toString();
     }
 
@@ -359,11 +387,11 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         /* ================== Tabla de Simbolos ================== */
         String identificador = ctx.IDENTIFIER().getText();
         Type returnType;
-        if (visitTipoidentificador(ctx.tipoidentificador()).equals("integer")) {
+        if (visitTipoidentificador(ctx.tipoidentificador()).equalsIgnoreCase("integer")) {
             returnType = new Type(Type.BasicType.INTEGER);
-        } else if (visitTipoidentificador(ctx.tipoidentificador()).equals("boolean")) {
+        } else if (visitTipoidentificador(ctx.tipoidentificador()).equalsIgnoreCase("boolean")) {
             returnType = new Type(Type.BasicType.BOOLEAN);
-        } else if (visitTipoidentificador(ctx.tipoidentificador()).equals("string")) {
+        } else if (visitTipoidentificador(ctx.tipoidentificador()).equalsIgnoreCase("string") ) {
             returnType = new Type(Type.BasicType.STRING);
         } else {
             returnType = new Type(Type.BasicType.CHAR);
@@ -372,7 +400,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         scopeManager.define(identificador, functionSymbol);
         //Aumentar el nivel de scope (1) para funciones locales de las funciones o procesos
         scopeManager.enterScope();
-
+        actualScope = 1;
         return ctx.FUNCTION().getText() + ctx.IDENTIFIER().getText() + ctx.PARL().getText() + (ctx.listaformalparametros() != null ? visitListaformalparametros(ctx.listaformalparametros()) : "") + ctx.PARR().getText()
                 + ctx.COLON().getText() + visitTipoidentificador(ctx.tipoidentificador()) + ctx.SEMICOLON().getText() + (ctx.bloque() != null ? visitBloque(ctx.bloque()) : "");
 
@@ -387,6 +415,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         scopeManager.define(identificador, procedureSymbol);
         //Aumentar el nivel de scope (1) para funciones locales de las funciones o procesos
         scopeManager.enterScope();
+        actualScope = 1;
         return ctx.PROCEDURE().getText() + " " +  ctx.IDENTIFIER().getText() + (ctx.PARL() != null ? ctx.PARL().getText() : "") + (ctx.listaformalparametros() != null ? visitListaformalparametros(ctx.listaformalparametros()) : "") + (ctx.PARR() != null ? ctx.PARR().getText() : "")
                 + ctx.SEMICOLON().getText() + visitBloque(ctx.bloque());
     }
@@ -450,6 +479,34 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         StringBuilder resultado = new StringBuilder();
         resultado.append(ctx.IF().getText());
         resultado.append(" ");
+        if (ctx.expresion().expresion() != null){
+
+            String expresion1 = ctx.expresion().expresion().getText();
+            String expresion2 = ctx.expresion().expresionsimple().getText();
+            //quitar parentesis () si es que los tiene
+
+            scopeManager.getSymbolTable().setLine(ctx.start.getLine());
+            scopeManager.getSymbolTable().setColumn(ctx.start.getCharPositionInLine());
+            Symbol symbol = scopeManager.getSymbolTable().getSymbolbyIdentifier(expresion1);
+            Symbol symbol2 = scopeManager.getSymbolTable().getSymbolbyIdentifier(expresion2);
+            if (symbol != null && symbol2 != null) {
+                if (symbol.getType() != symbol2.getType()) {
+                    scopeManager.getSymbolTable().badOperationType();
+                }
+            }
+        } else if (ctx.expresion().expresionsimple().termino().signofactor().factor().PARL() != null   ){
+            String expresion1 = ctx.expresion().expresionsimple().termino().signofactor().factor().expresion().expresionsimple().getText();
+            String expresion2 = ctx.expresion().expresionsimple().termino().signofactor().factor().expresion().expresion().getText();
+            scopeManager.getSymbolTable().setLine(ctx.start.getLine());
+            scopeManager.getSymbolTable().setColumn(ctx.start.getCharPositionInLine());
+            Symbol symbol = scopeManager.getSymbolTable().getSymbolbyIdentifier(expresion1);
+            Symbol symbol2 = scopeManager.getSymbolTable().getSymbolbyIdentifier(expresion2);
+            if (symbol != null && symbol2 != null) {
+                if (symbol.getType() != symbol2.getType()) {
+                    scopeManager.getSymbolTable().badOperationType();
+                }
+            }
+        }
         resultado.append(visitExpresion(ctx.expresion()));
         resultado.append(" ");
         resultado.append(ctx.THEN().getText());
@@ -504,7 +561,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
           StringBuilder resultado = new StringBuilder();
           if (ctx.parametroactual() != null){
                 for (MiniPascalParser.ParametroactualContext param : ctx.parametroactual()){
-                    resultado.append(param.getText());
+                    resultado.append(visitParametroactual(param));
                 }
           }
           return resultado.toString();
