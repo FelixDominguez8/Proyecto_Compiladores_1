@@ -44,6 +44,14 @@ public class SymbolTable {
         currentScopeIndex--;
     }
 
+    public SemanticErrorManager getSemanticErrorManager() {
+        return semanticErrorManager;
+    }
+
+    public void setSemanticErrorManager(SemanticErrorManager semanticErrorManager) {
+        this.semanticErrorManager = semanticErrorManager;
+    }
+
     public void insert(String identifier, Symbol symbol) {
         Map<String, Symbol> currentScope = scopes.get(currentScopeIndex);
         if (currentScope.containsKey(identifier)) {
@@ -117,7 +125,9 @@ public class SymbolTable {
         for (int i = 0; i < scopes.size(); i++) {
             Map<String, Symbol> currentScope = scopes.get(i);
             if (currentScope.containsValue(symbol) && i != actualScopeVisitor && symbol.getType().getBaseType() != Type.BasicType.FUNCTION && symbol.getType().getBaseType() != Type.BasicType.PROCEDURE) {
-                semanticErrorManager.addError(new SemanticError("Semantic Error", line, column, "El identificador " + symbol.getIdentifier() + " no ha sido declarado en este scope."));
+               if(i != 0){
+                   semanticErrorManager.addError(new SemanticError("Semantic Error", line, column, "El identificador " + symbol.getIdentifier() + " no ha sido declarado en este scope."));
+               }
             }
         }
 
@@ -137,7 +147,7 @@ public class SymbolTable {
         for (int i = 0; i < scopes.size(); i++){
             Map<String, Symbol> currentScope = scopes.get(i);
             for (Symbol symbol : currentScope.values()){
-                if (symbol.getValue() == null){
+                if (symbol.getValue() == null && symbol.getType().getBaseType() != Type.BasicType.FUNCTION && symbol.getType().getBaseType() != Type.BasicType.PROCEDURE){
                     semanticErrorManager.addError(new SemanticError("Semantic Error", line, column, "El identificador " + symbol.getIdentifier() + " no ha sido inicializado."));
                 }
             }
