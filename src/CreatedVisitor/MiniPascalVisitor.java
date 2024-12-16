@@ -545,7 +545,7 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
     }
     @Override
     public String visitLength(MiniPascalParser.LengthContext ctx) {
-        return ctx.LENGTH().getText() + " " + ctx.PARL().getText() + (ctx.variable() != null ? visitVariable(ctx.variable()) : "") + ctx.PARR().getText() + " ";
+        return ctx.LENGTH().getText() + " " + (ctx.PARL() != null ? ctx.PARL().getText() : "" ) + (ctx.variable() != null ? visitVariable(ctx.variable()) : "") + (ctx.PARR() != null ? ctx.PARR().getText() : "" ) + " ";
     }
 
     @Override
