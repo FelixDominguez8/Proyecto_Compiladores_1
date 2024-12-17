@@ -190,7 +190,8 @@ public class MiniPascalVisitor extends MiniPascalBaseVisitor<String> {
         String expresion = visitExpresion(ctx.expresion());
         String noSpaceExpresion = expresion.replaceAll("\\s+","");
         String operationType = "";
-        if (noSpaceExpresion.equalsIgnoreCase("true") || noSpaceExpresion.equalsIgnoreCase("false")) {
+        if (noSpaceExpresion.equalsIgnoreCase("true") || noSpaceExpresion.equalsIgnoreCase("false") || noSpaceExpresion.toLowerCase().contains("or") ||
+                noSpaceExpresion.toLowerCase().contains("and") || noSpaceExpresion.toLowerCase().contains("not") ) {
             operationType = "boolean";
         } else{
             operationType = "integer";
